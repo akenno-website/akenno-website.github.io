@@ -8,26 +8,26 @@ body {
 }
 
 .site-header {
-  background: #262626;
-  color: #eee;
-  text-align: left; /* left-align the text */
-  padding: 1rem 2rem; /* some left/right padding */
-  font-family: system-ui, sans-serif;
-  font-size: 1.5rem;
-  border-bottom: 1px solid #333;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-}
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    background: #222;
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    font-size: 1rem;
+  }
 
-.download-btn {
+  .download-btn {
+    margin-left: auto;      /* pushes it to the right */
     background: #444;
     color: #fff;
     border: none;
-    padding: 0.25rem 0.5rem; /* smaller padding */
+    padding: 0.25rem 0.5rem;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 0.8rem; /* smaller font */
+    font-size: 0.8rem;
     text-decoration: none;
   }
 
@@ -267,4 +267,3 @@ canvas {
     background-color: #111;
     color: #6ff;
 }
-
