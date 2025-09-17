@@ -23,7 +23,7 @@ let mainFeed = []; // store posts
 
 // --- Helpers ---
 function generateGarbledText(length){
-  const chars=' EEEEEeeeeettttaaaaOOOOooooIIIiiiNNnnSSSSssssHHHhhhRRRrrrDDDdddLLLlllCCCcccUUUuuuMMmmWWwwFFffGGggYYyyPPppBbvVKkJjXxQqZz0123456789';
+  const chars='          EEEEEeeeeettttaaaaOOOOooooIIIiiiNNnnSSSSssssHHHhhhRRRrrrDDDdddLLLlllCCCcccUUUuuuMMmmWWwwFFffGGggYYyyPPppBbvVKkJjXxQqZz0123456789';
   let s=''; for(let i=0;i<length;i++){ s+=chars.charAt(Math.floor(Math.random()*chars.length)); } 
   return s;
 }
@@ -228,3 +228,4 @@ window.addEventListener('load',()=>{
 </script>
 </body>
 </html>
+
