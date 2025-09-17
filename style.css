@@ -20,6 +20,20 @@ body {
   z-index: 1000;
 }
 
+.download-btn {
+    background: #444;
+    color: #fff;
+    border: none;
+    padding: 0.25rem 0.5rem; /* smaller padding */
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem; /* smaller font */
+    text-decoration: none;
+  }
+
+  .download-btn:hover {
+    background: #666;
+  }
 
 .feed {
     max-width: 650px;
@@ -253,3 +267,4 @@ canvas {
     background-color: #111;
     color: #6ff;
 }
+
