@@ -4,7 +4,6 @@
 <meta charset="UTF-8" />
 <title>Random Garbled Feed (RGF)</title>
 <link rel="stylesheet" href="style.css">
-<!-- LZ-String for compression -->
 <script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
 </head>
 <body>
@@ -21,7 +20,7 @@
 <script>
 const feed = document.getElementById('feed');
 const loading = document.getElementById('loading');
-let mainFeed = []; // store posts
+let mainFeed = [];
 
 // --- Helpers ---
 function generateGarbledText(length){
@@ -94,22 +93,22 @@ function generateNoiseFromSeed(seed, width=50, height=50){
   return canvas;
 }
 
-// --- Encode/decode post data with backward compatibility ---
+// --- Encode/decode post data ---
 function encodePostData(data){ 
-    // New posts use LZ-string compression
     return LZString.compressToEncodedURIComponent(JSON.stringify(data));
 }
 
 function decodePostData(str){
-    // Try LZ-string first
+    if(!str) return null;
+    // Try LZ-string
     try {
         const jsonStr = LZString.decompressFromEncodedURIComponent(str);
-        if (jsonStr) return JSON.parse(jsonStr);
-    } catch(e){}
-    // Fallback to plain Base64 for old links
+        if(jsonStr) return JSON.parse(jsonStr);
+    } catch(e){ console.warn('LZ-string decode failed', e); }
+    // Fallback to Base64
     try {
         return JSON.parse(atob(str));
-    } catch(e){}
+    } catch(e){ console.warn('Base64 decode failed', e); }
     return null;
 }
 
@@ -117,9 +116,9 @@ function decodePostData(str){
 function createReplyElement(reply){
   const r = document.createElement('div'); r.className='reply';
   const u = document.createElement('span'); u.className='reply-username';
-  u.textContent = reply.username;           // use stored username
+  u.textContent = reply.username;
   const t = document.createElement('span'); t.className='reply-text';
-  t.textContent = reply.text;               // use stored text
+  t.textContent = reply.text;
   r.appendChild(u); r.appendChild(t); 
   return r;
 }
@@ -241,7 +240,7 @@ window.addEventListener('load',()=>{
   if(id){
     const postData = decodePostData(id);
     if(postData) openPostPage(postData);
-    else loadPosts(20);
+    else loadPosts(20); // fallback
   } else loadPosts(20);
 });
 </script>
