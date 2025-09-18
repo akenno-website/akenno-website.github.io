@@ -114,11 +114,14 @@ function decodePostData(str){
 }
 
 // --- Replies ---
-function createReplyElement(text){
+function createReplyElement(reply){
   const r = document.createElement('div'); r.className='reply';
-  const u = document.createElement('span'); u.className='reply-username'; u.textContent=generateGarbledText(5);
-  const t = document.createElement('span'); t.className='reply-text'; t.textContent=text;
-  r.appendChild(u); r.appendChild(t); return r;
+  const u = document.createElement('span'); u.className='reply-username';
+  u.textContent = reply.username;           // use stored username
+  const t = document.createElement('span'); t.className='reply-text';
+  t.textContent = reply.text;               // use stored text
+  r.appendChild(u); r.appendChild(t); 
+  return r;
 }
 
 // --- Post element ---
@@ -157,7 +160,7 @@ function createPostElement(postData){
 
   // Replies
   const repliesContainer = document.createElement('div'); repliesContainer.className='replies';
-  postData.replies.forEach(r => repliesContainer.appendChild(createReplyElement(r)));
+  postData.replies.forEach(reply => repliesContainer.appendChild(createReplyElement(reply)));
 
   // Comments toggle
   const commentsToggle = document.createElement('button'); commentsToggle.className='comments-toggle';
@@ -186,7 +189,10 @@ function generateRandomPost(){
     username: generateGarbledText(7),
     caption: generateGarbledText(40),
     date: createDateString(),
-    replies: Array.from({length:Math.floor(Math.random()*12)+1},()=>generateGarbledText(Math.floor(Math.random()*8)+8)),
+    replies: Array.from({length: Math.floor(Math.random()*12)+1}, () => ({
+        username: generateGarbledText(5),
+        text: generateGarbledText(Math.floor(Math.random()*8)+8)
+    })),
     likes: Math.floor(Math.random()*500),
     isSponsored: Math.random()<0.1,
     seed: Math.floor(Math.random()*1e9)
