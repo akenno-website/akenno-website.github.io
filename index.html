@@ -4,6 +4,8 @@
 <meta charset="UTF-8" />
 <title>Random Garbled Feed (RGF)</title>
 <link rel="stylesheet" href="style.css">
+<!-- LZ-String for compression -->
+<script src="https://cdn.jsdelivr.net/npm/lz-string@1.4.4/libs/lz-string.min.js"></script>
 </head>
 <body>
 <header class="site-header">
@@ -66,7 +68,6 @@ function showShareOverlay(link) {
   document.body.appendChild(overlay);
 }
 
-
 // --- Seeded PRNG ---
 function mulberry32(a){
   return function(){
@@ -93,9 +94,18 @@ function generateNoiseFromSeed(seed, width=50, height=50){
   return canvas;
 }
 
-// --- Encode/decode post data ---
-function encodePostData(data){ return btoa(JSON.stringify(data)); }
-function decodePostData(str){ try{ return JSON.parse(atob(str)); }catch(e){ return null; } }
+// --- Encode/decode post data using LZ-string compression ---
+function encodePostData(data){ 
+    return LZString.compressToEncodedURIComponent(JSON.stringify(data));
+}
+function decodePostData(str){ 
+    try{ 
+        const jsonStr = LZString.decompressFromEncodedURIComponent(str);
+        return JSON.parse(jsonStr);
+    }catch(e){ 
+        return null; 
+    }
+}
 
 // --- Replies ---
 function createReplyElement(text){
@@ -157,7 +167,6 @@ function createPostElement(postData){
     showShareOverlay(link);
     });
 
-
   post.appendChild(header); post.appendChild(caption); post.appendChild(imageContainer);
   post.appendChild(likeBar); post.appendChild(commentsToggle); post.appendChild(repliesContainer); post.appendChild(shareBtn);
 
@@ -180,7 +189,6 @@ function generateRandomPost(){
 
 // --- Open single post page ---
 function openPostPage(postData){
-  // Hide feed
   feed.style.display = 'none';
   loading.style.display = 'none';
 
@@ -198,7 +206,6 @@ function openPostPage(postData){
   postPage.appendChild(createPostElement(postData));
   document.body.appendChild(postPage);
 
-  // Update URL
   history.replaceState({}, '', `${location.pathname}?id=${encodePostData(postData)}`);
 }
 
@@ -228,4 +235,3 @@ window.addEventListener('load',()=>{
 </script>
 </body>
 </html>
-
