@@ -94,17 +94,23 @@ function generateNoiseFromSeed(seed, width=50, height=50){
   return canvas;
 }
 
-// --- Encode/decode post data using LZ-string compression ---
+// --- Encode/decode post data with backward compatibility ---
 function encodePostData(data){ 
+    // New posts use LZ-string compression
     return LZString.compressToEncodedURIComponent(JSON.stringify(data));
 }
-function decodePostData(str){ 
-    try{ 
+
+function decodePostData(str){
+    // Try LZ-string first
+    try {
         const jsonStr = LZString.decompressFromEncodedURIComponent(str);
-        return JSON.parse(jsonStr);
-    }catch(e){ 
-        return null; 
-    }
+        if (jsonStr) return JSON.parse(jsonStr);
+    } catch(e){}
+    // Fallback to plain Base64 for old links
+    try {
+        return JSON.parse(atob(str));
+    } catch(e){}
+    return null;
 }
 
 // --- Replies ---
